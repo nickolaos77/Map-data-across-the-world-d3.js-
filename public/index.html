@@ -42,7 +42,7 @@
   <body style="height:100%; background-color:aqua;">
 
     <div id="viz" style="height:100%;">
-      <svg style="width:800;height:800; background-color:aqua; position:relative; margin:auto 15% " />
+      <svg style="width:900;height:700; background-color:aqua; position:relative; margin:auto 15% " />
     </div>
     <script type="text/javascript">
       // Making multiple json requests with fetch and Promise.all
@@ -64,14 +64,14 @@
       function createMap(countries,cities) {
           console.log(countries);
           console.log(cities.features);
-        var width = 700;
-        var height = 700;
+        var width = 800;
+        var height = 600;
 
           
           
         var aProjection = d3.geoMercator()
                             .scale(80)
-                            .translate([width/2 +300 , height/2]);
+                            .translate([width/2, height/2]);
         
         // var aProjection = d3.geoMercator().fitSize([width, height], "world.geojson");
           
@@ -82,7 +82,7 @@
           
           
               var zoomSettings = d3.zoomIdentity
-          .translate(350, 350)
+          .translate(400, 300)
           .scale(120);
           
         d3.select("svg").call(mapZoom).call(mapZoom.transform, zoomSettings);  
