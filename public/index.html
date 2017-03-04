@@ -126,16 +126,16 @@
                     gCont.append('text').attr('id','region').text("region: " + d.properties.name)
                          .attr('x',toolTipPosX +  5  ).attr('y', toolTipPosY + 20 )
                          .attr('text-anchor','start').attr("fill","white")
-                         .style('font-size','12px');
+                         .style('font-size','14px');
                     gCont.append('text').attr('id','mass').text("mass: " + d.properties.mass)
                          .attr('x',toolTipPosX +  5  ).attr('y', toolTipPosY + 38 )
                          .attr('text-anchor','start').attr("fill","white")
-                         .style('font-size','12px'); 
+                         .style('font-size','14px'); 
  
                     gCont.append('text').attr('id','year').text("year: " + d.properties.year.slice(0,4))
                          .attr('x',toolTipPosX +  5  ).attr('y', toolTipPosY + 56 )
                          .attr('text-anchor','start').attr("fill","white")
-                         .style('font-size','12px'); 
+                         .style('font-size','14px'); 
                     }
                  )
             .on('mouseout', ()=>{ 
