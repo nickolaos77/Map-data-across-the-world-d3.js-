@@ -1,51 +1,177 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Leaflet GeoJSON Example</title>
-    <meta charset="utf-8" />
-    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.1/leaflet.css" />
-    <style type="text/css">
-        .leaflet-container{background-color:#c5e8ff;}
+<!doctype html>
+<html style="height:100%;">
+  <head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.2.8/d3.min.js" type="text/JavaScript"></script>
+    <style>
+      path.countries {
+        stroke-width: 1;
+        stroke: #75739F;
+        fill: #5EAFC6;
+      }
+      circle.cities {
+        stroke-width: 1;
+        stroke: #4F442B;
+        fill: #FCBC34;
+      }
+      circle.centroid {
+        fill: #75739F;
+        pointer-events: none;
+      }
+      rect.bbox {
+        fill: none;
+        stroke-dasharray: 5 5;
+        stroke: #75739F;
+        stroke-width: 2;
+        pointer-events: none;
+      }
+      path.graticule {
+        fill: none;
+        stroke-width: 1;
+        stroke: #9A8B7A;
+      }
+      path.graticule.outline {
+        stroke: #9A8B7A;
+      }
+      path.merged {
+        fill: #9A8B7A;
+        stroke: #4F442B;
+        stroke-width: 2px;
+      }
     </style>
-</head>
+  </head>
+  <body style="height:100%;">
 
-<body>
-    <div id="map" style="width: 600px; height: 400px"></div>
-
-    <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
-    <script src="http://cdn.leafletjs.com/leaflet-0.7.1/leaflet.js"></script>
-    <script>
-        var myGeoJSONPath = 'path/to/mymap.geo.json';
-        var myCustomStyle = {
-            stroke: false,
-            fill: true,
-            fillColor: '#fff',
-            fillOpacity: 1
-        }
-        $.getJSON(myGeoJSONPath,function(data){
-            var map = L.map('map').setView([39.74739, -105], 4);
-
-            L.geoJson(data, {
-                clickable: false,
-                style: myCustomStyle
-            }).addTo(map);
-        })
-    </script>
-</body>
-    
-<!--    
-    -------------Links-----------  
-
-1. http://www.d3noob.org/2013/03/a-simple-d3js-map-explained.html
-2. https://leanpub.com/D3-Tips-and-Tricks/read
-3. https://geojson-maps.ash.ms/
-4. 
-
---------------- User Stories---------------------------
-1. The p1xt guide user stories
+    <div id="viz" style="height:100%;">
+      <svg style="width:100%;height:600; background-color:aqua; position:relative; " />
+    </div>
+    <script type="text/javascript">
+      // Making multiple json requests with fetch and Promise.all
+            //http://stackoverflow.com/questions/31710768/how-can-i-fetch-an-array-of-urls-with-promise-all
   
--->
-    
-    
+        
+        
+        
+ var url = "https://raw.githubusercontent.com/FreeCodeCamp/ProjectReferenceData/master/meteorite-strike-data.json";
+        Promise.all([fetch("world.geojson"),fetch(url)]).then(function(responses){
+                return Promise.all([responses[0].json(), responses[1].json()])
+            }).then(function(data){
+                createMap(data[0], data[1]);
+            })
+        
+        
+        
+      //d3.json("world.geojson", createMap);
+      function createMap(countries,cities) {
+          console.log(countries);
+          console.log(cities.features);
+        var width = 500;
+        var height = 500;
+
+          
+//          
+//        var aProjection = d3.geoMercator()
+//                            .scale(80)
+//                            .translate([width/2, height/2]);
+        
+          var aProjection = d3.geoMercator().fitSize([width, height], "world.geojson");
+          
+          
+          
+          var mapZoom = d3.zoom()
+                        .on("zoom", zoomed);  
+          
+          
+              var zoomSettings = d3.zoomIdentity
+          .translate(400, 400)
+          .scale(120);
+          
+        d3.select("svg").call(mapZoom).call(mapZoom.transform, zoomSettings);  
+          
+          
+        var geoPath = d3.geoPath().projection(aProjection);
+        d3.select("svg").selectAll("path").data(countries.features)
+          .enter()
+          .append("path")
+        .attr("class", "countries")
+            .attr("d", geoPath)
+            .style("fill", "gray");
+          
+       var zoomSettings = d3.zoomIdentity
+          .translate(250, 250)
+          .scale(120);
+        d3.select("svg").call(mapZoom).call(mapZoom.transform, zoomSettings);
+          
+          
+        d3.select("svg").selectAll("circle").data(cities.features)
+          .enter()
+          .append("circle")
+            .style("fill", "red")
+            .attr("class", "cities")
+            .attr("r", d=> {
+                if (d.properties.mass<100)    return  1 ;
+                if (d.properties.mass<10000)    return  2 ;
+                if (d.properties.mass<100000)    return  3;
+                
+                if (d.properties.mass<1000000)    return  1.2* d.properties.mass/ 100000;
+                if (d.properties.mass<100000000)    return  d.properties.mass/1000000;
+                
+            
+                
+        } )
+            .attr("cx", d => aProjection([d.properties.reclong,d.properties.reclat])[0])
+            .attr("cy", d =>aProjection([d.properties.reclong,d.properties.reclat])[1])
+            .on ("mouseover", d=>{
+                    tooltip.style("opacity","0.6")
+                    let toolTipPosX = aProjection([d.properties.reclong,d.properties.reclat])[0] + 10;
+                    let toolTipPosY = aProjection([d.properties.reclong,d.properties.reclat])[1] - 20;
+                    tooltip.attr("x",toolTipPosX).attr('y', toolTipPosY );
+            
+                    gCont.append('text').attr('id','region').text("region: " + d.properties.name)
+                         .attr('x',toolTipPosX +  5  ).attr('y', toolTipPosY + 20 )
+                         .attr('text-anchor','start').attr("fill","white")
+                         .style('font-size','12px');
+                    gCont.append('text').attr('id','mass').text("mass: " + d.properties.mass)
+                         .attr('x',toolTipPosX +  5  ).attr('y', toolTipPosY + 38 )
+                         .attr('text-anchor','start').attr("fill","white")
+                         .style('font-size','12px'); 
+ 
+                    gCont.append('text').attr('id','year').text("year: " + d.properties.year.slice(0,4))
+                         .attr('x',toolTipPosX +  5  ).attr('y', toolTipPosY + 56 )
+                         .attr('text-anchor','start').attr("fill","white")
+                         .style('font-size','12px'); 
+                    }
+                 )
+            .on('mouseout', ()=>{ 
+                      tooltip.style('opacity','0');
+                      document.getElementById('region').remove();
+                      document.getElementById('mass').remove();
+                      document.getElementById('year').remove();                  
+                    })                           
+        
+ 
+        //Tooltip        
+       const gCont = d3.select("svg").append('g').attr('transform', "translate(0,0)")
+       const toolWidth = 140; 
+       const tooltip =  gCont.append("rect")					
+                           .attr('fill','blue').attr('width', toolWidth).attr('height',70).style('opacity', '0');         
+
+          
+        function zoomed() {
+          var e = d3.event
+          aProjection.translate([e.transform.x, e.transform.y])
+            .scale(e.transform.k);
+          d3.selectAll("path.countries").attr("d", geoPath);
+          d3.selectAll("circle.cities")
+              .attr("cx", d => aProjection([d.properties.reclong,d.properties.reclat])[0])
+              .attr("cy", d => aProjection([d.properties.reclong,d.properties.reclat])[1]);
+        }                    
+      }
+    </script>
+  </body>
+
 </html>
+
+
+
+
 

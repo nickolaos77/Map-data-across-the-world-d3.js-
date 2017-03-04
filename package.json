@@ -9,15 +9,16 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/nickolaos77/forcedirectedgraph.git"
+    "url": "git+https://github.com/nickolaos77/Map-data-across-the-world-d3.js-.git"
   },
   "author": "Nick Papasavvas",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/nickolaos77/forcedirectedgraph/issues"
+    "url": "https://github.com/nickolaos77/Map-data-across-the-world-d3.js-/issues"
   },
-  "homepage": "https://github.com/nickolaos77/forcedirectedgraph#readme",
+  "homepage": "https://github.com/nickolaos77/Map-data-across-the-world-d3.js-#readme",
   "dependencies": {
     "express": "^4.14.1"
   }
 }
+

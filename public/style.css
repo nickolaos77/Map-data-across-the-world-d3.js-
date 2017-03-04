@@ -1,31 +1,25 @@
-html, body {
-   height: 100%;  
+/*
+.container {    
+    margin:5vmin 5vmin;
+    width: 90vw;
+    height: 50vw;
+}
+*/
+path.countries{
+    stroke-width :1 ;
+    stroke: black;
+    opacity: 0.5;
+    fill: red
 }
 
-
-#container {
-    
-}
-svg {
-  
-  display: block;
-  background-color: white;
-     
+circle.cities{
+    stroke-width:1;
+    stroke: black;
+    fill: white;
 }
 
-.node {
-    fill: red;
-    stroke: #fff;
-    stroke-width: 2px;
+circle.centroid{
+    fill:red;
+    pointer-events: none;
 }
 
-.link {
-    stroke: #777;
-    stroke-width: 2px;
-}
-
-.absolute{
-position: absolute;
-}
-
- 
