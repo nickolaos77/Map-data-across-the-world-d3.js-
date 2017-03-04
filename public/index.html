@@ -70,7 +70,7 @@
           
           
         var aProjection = d3.geoMercator()
-                            .scale(80)
+                            .scale(100)
                             .translate([width/2, height/2]);
         
         // var aProjection = d3.geoMercator().fitSize([width, height], "world.geojson");
@@ -81,7 +81,7 @@
                         .on("zoom", zoomed);  
           
           
-              var zoomSettings = d3.zoomIdentity
+      var zoomSettings = d3.zoomIdentity
           .translate(400, 300)
           .scale(120);
           
