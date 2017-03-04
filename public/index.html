@@ -64,8 +64,8 @@
       function createMap(countries,cities) {
           console.log(countries);
           console.log(cities.features);
-        var width = 800;
-        var height = 800;
+        var width = 500;
+        var height = 500;
 
           
           
@@ -82,7 +82,7 @@
           
           
               var zoomSettings = d3.zoomIdentity
-          .translate(400, 400)
+          .translate(250, 250)
           .scale(120);
           
         d3.select("svg").call(mapZoom).call(mapZoom.transform, zoomSettings);  
